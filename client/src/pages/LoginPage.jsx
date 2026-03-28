@@ -5,6 +5,8 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { setCredentials } from '../store/authSlice';
 
+const BASE_URL = "https://eternal-attires.onrender.com";
+
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -29,7 +31,7 @@ const LoginPage = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const { data } = await axios.post((process.env.REACT_APP_API_URL || 'http://localhost:5000') + '/api/users/login', { email, password });
+      const { data } = await axios.post(`${BASE_URL}/api/users/login`, { email, password });
       dispatch(setCredentials(data));
       navigate(redirect);
     } catch (err) {

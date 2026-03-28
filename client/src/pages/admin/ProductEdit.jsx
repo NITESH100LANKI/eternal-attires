@@ -4,6 +4,8 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import Loader from '../../components/Loader';
 
+const BASE_URL = "https://eternal-attires.onrender.com";
+
 const ProductEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -25,7 +27,7 @@ const ProductEdit = () => {
     if (!isNew) {
       const fetchProduct = async () => {
         try {
-          const { data } = await axios.get(`http://localhost:5000/api/products/${id}`);
+          const { data } = await axios.get(`${BASE_URL}/api/products/${id}`);
           setName(data.name);
           setPrice(data.price);
           setDiscountPrice(data.discountPrice || 0);
@@ -53,7 +55,7 @@ const ProductEdit = () => {
     }
     setUploading(true);
     try {
-      const { data } = await axios.post((process.env.REACT_APP_API_URL || 'http://localhost:5000') + '/api/upload', formData, {
+      const { data } = await axios.post(`${BASE_URL}/api/upload`, formData, {
         withCredentials: true,
         headers: { 'Content-Type': 'multipart/form-data' },
       });
@@ -77,10 +79,10 @@ const ProductEdit = () => {
       };
 
       if (isNew) {
-        await axios.post((process.env.REACT_APP_API_URL || 'http://localhost:5000') + '/api/products', payload, { withCredentials: true });
+        await axios.post(`${BASE_URL}/api/products`, payload, { withCredentials: true });
         toast.success('Product created');
       } else {
-        await axios.put(`http://localhost:5000/api/products/${id}`, payload, { withCredentials: true });
+        await axios.put(`${BASE_URL}/api/products/${id}`, payload, { withCredentials: true });
         toast.success('Product updated');
       }
       navigate('/admin/productlist');

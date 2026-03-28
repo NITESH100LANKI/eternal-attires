@@ -5,6 +5,8 @@ import { toast } from 'react-toastify';
 import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
 import Loader from '../../components/Loader';
 
+const BASE_URL = "https://eternal-attires.onrender.com";
+
 const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -15,7 +17,7 @@ const ProductList = () => {
 
   const fetchProducts = async () => {
     try {
-      const { data } = await axios.get((process.env.REACT_APP_API_URL || 'http://localhost:5000') + '/api/products');
+      const { data } = await axios.get(`${BASE_URL}/api/products`);
       setProducts(data);
     } catch (error) {
       toast.error('Failed to fetch products');
@@ -26,7 +28,7 @@ const ProductList = () => {
   const deleteHandler = async (id) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
-        await axios.delete(`http://localhost:5000/api/products/${id}`, { withCredentials: true });
+        await axios.delete(`${BASE_URL}/api/products/${id}`, { withCredentials: true });
         toast.success('Product deleted successfully');
         fetchProducts(); // refresh
       } catch (err) {

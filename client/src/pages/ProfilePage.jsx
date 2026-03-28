@@ -7,6 +7,8 @@ import Loader from '../components/Loader';
 import { FaBox, FaTimes, FaCheck } from 'react-icons/fa';
 import { setCredentials } from '../store/authSlice';
 
+const BASE_URL = "https://eternal-attires.onrender.com";
+
 const ProfilePage = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -31,7 +33,7 @@ const ProfilePage = () => {
       const fetchMyOrders = async () => {
          try {
            const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-           const { data } = await axios.get((process.env.REACT_APP_API_URL || 'http://localhost:5000') + '/api/orders/myorders', { ...config, withCredentials: true });
+           const { data } = await axios.get(`${BASE_URL}/api/orders/myorders`, { ...config, withCredentials: true });
            setOrders(data);
          } catch (error) {
            toast.error('Failed to load your orders');
@@ -51,7 +53,7 @@ const ProfilePage = () => {
     }
     try {
       const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-      const { data } = await axios.put((process.env.REACT_APP_API_URL || 'http://localhost:5000') + '/api/users/profile', { name, email, password }, { ...config, withCredentials: true });
+      const { data } = await axios.put(`${BASE_URL}/api/users/profile`, { name, email, password }, { ...config, withCredentials: true });
       dispatch(setCredentials(data));
       toast.success('Profile updated');
     } catch (err) {

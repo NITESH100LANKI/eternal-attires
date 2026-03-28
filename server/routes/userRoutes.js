@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {
-  authUser,
+  loginUser,
   registerUser,
   logoutUser,
   getUserProfile,
@@ -12,8 +12,9 @@ const {
 } = require('../controllers/userController');
 const { protect, admin } = require('../middleware/authMiddleware');
 
-router.route('/').post(registerUser).get(protect, admin, getUsers);
-router.post('/login', authUser);
+router.route('/').get(protect, admin, getUsers);
+router.post('/register', registerUser);
+router.post('/login', loginUser);
 router.post('/logout', logoutUser);
 router.route('/profile').get(protect, getUserProfile).put(protect, updateUserProfile);
 router.route('/wishlist').get(protect, getUserWishlist).post(protect, toggleWishlistItem);

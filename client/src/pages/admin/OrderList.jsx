@@ -5,6 +5,8 @@ import Loader from '../../components/Loader';
 import { useSelector } from 'react-redux';
 import { FaTruck, FaTimes } from 'react-icons/fa';
 
+const BASE_URL = "https://eternal-attires.onrender.com";
+
 const OrderList = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,7 +19,7 @@ const OrderList = () => {
   const fetchOrders = async () => {
     try {
       const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-      const { data } = await axios.get((process.env.REACT_APP_API_URL || 'http://localhost:5000') + '/api/orders', { ...config, withCredentials: true });
+      const { data } = await axios.get(`${BASE_URL}/api/orders`, { ...config, withCredentials: true });
       setOrders(data);
     } catch (error) {
       toast.error('Failed to fetch orders');
@@ -29,7 +31,7 @@ const OrderList = () => {
     if (window.confirm('Mark this order as delivered?')) {
       try {
         const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-        await axios.put(`http://localhost:5000/api/orders/${id}/deliver`, {}, { ...config, withCredentials: true });
+        await axios.put(`${BASE_URL}/api/orders/${id}/deliver`, {}, { ...config, withCredentials: true });
         toast.success('Order delivered');
         fetchOrders();
       } catch (err) {

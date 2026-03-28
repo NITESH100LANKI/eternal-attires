@@ -5,6 +5,8 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { setCredentials } from '../store/authSlice';
 
+const BASE_URL = "https://eternal-attires.onrender.com";
+
 const RegisterPage = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -34,7 +36,7 @@ const RegisterPage = () => {
     }
     setLoading(true);
     try {
-      const { data } = await axios.post((process.env.REACT_APP_API_URL || 'http://localhost:5000') + '/api/users', { name, email, password });
+      const { data } = await axios.post(`${BASE_URL}/api/users/register`, { name, email, password });
       dispatch(setCredentials(data));
       navigate(redirect);
     } catch (err) {

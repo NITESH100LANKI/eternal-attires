@@ -4,6 +4,8 @@ import ProductCard from '../components/ProductCard';
 import Loader from '../components/Loader';
 import { toast } from 'react-toastify';
 
+const BASE_URL = "https://eternal-attires.onrender.com";
+
 const HeroCarousel = () => {
   return (
     <div className="relative w-full h-[60vh] bg-gray-100 mb-12 flex items-center justify-center overflow-hidden">
@@ -36,7 +38,7 @@ const HomePage = () => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const { data } = await axios.get((process.env.REACT_APP_API_URL || 'http://localhost:5000') + '/api/products');
+        const { data } = await axios.get(`${BASE_URL}/api/products`);
         setProducts(data);
       } catch (error) {
         toast.error('Failed to load products');

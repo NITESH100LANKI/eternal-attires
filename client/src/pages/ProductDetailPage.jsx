@@ -7,6 +7,8 @@ import { FaHeart, FaChevronDown, FaShareAlt } from 'react-icons/fa';
 import { addToCart } from '../store/cartSlice';
 import Loader from '../components/Loader';
 
+const BASE_URL = "https://eternal-attires.onrender.com";
+
 const ProductDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -20,7 +22,7 @@ const ProductDetailPage = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:5000/api/products/${id}`);
+        const { data } = await axios.get(`${BASE_URL}/api/products/${id}`);
         setProduct(data);
         if (data.sizes?.length > 0) {
           setSelectedSize(data.sizes[0]);

@@ -5,6 +5,8 @@ import { toast } from 'react-toastify';
 import Loader from '../../components/Loader';
 import { FaUsers, FaBoxOpen, FaMoneyBillWave } from 'react-icons/fa';
 
+const BASE_URL = "https://eternal-attires.onrender.com";
+
 const AdminDashboard = () => {
   const [data, setData] = useState({ users: 0, orders: 0, products: 0, revenue: 0 });
   const [loading, setLoading] = useState(true);
@@ -18,9 +20,9 @@ const AdminDashboard = () => {
         // We will mock the backend logic by fetching all independently, 
         // ideally a dedicated /api/admin/stats route is used.
         const [usersRes, productsRes, ordersRes] = await Promise.all([
-          axios.get((process.env.REACT_APP_API_URL || 'http://localhost:5000') + '/api/users', { withCredentials: true }),
-          axios.get((process.env.REACT_APP_API_URL || 'http://localhost:5000') + '/api/products', { withCredentials: true }),
-          axios.get((process.env.REACT_APP_API_URL || 'http://localhost:5000') + '/api/orders', { withCredentials: true })
+          axios.get(`${BASE_URL}/api/users`, { withCredentials: true }),
+          axios.get(`${BASE_URL}/api/products`, { withCredentials: true }),
+          axios.get(`${BASE_URL}/api/orders`, { withCredentials: true })
         ]);
 
         const revenue = ordersRes.data.reduce((acc, order) => acc + (order.isPaid ? order.totalPrice : 0), 0);

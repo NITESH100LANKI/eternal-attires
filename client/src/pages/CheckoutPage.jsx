@@ -5,6 +5,8 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { clearCartItems } from '../store/cartSlice';
 
+const BASE_URL = "https://eternal-attires.onrender.com";
+
 const CheckoutPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -40,10 +42,10 @@ const CheckoutPage = () => {
       const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
       
       // 1. Fetch Key from Server
-      const { data: keyData } = await axios.get((process.env.REACT_APP_API_URL || 'http://localhost:5000') + '/api/payment/razorpay/key', config);
+      const { data: keyData } = await axios.get(`${BASE_URL}/api/payment/razorpay/key`, config);
 
       // 2. Create Order on Server
-      const { data: orderData } = await axios.post((process.env.REACT_APP_API_URL || 'http://localhost:5000') + '/api/payment/razorpay/order', {
+      const { data: orderData } = await axios.post(`${BASE_URL}/api/payment/razorpay/order`, {
         amount: cart.totalPrice
       }, config);
 
@@ -58,7 +60,7 @@ const CheckoutPage = () => {
         handler: async function (response) {
           try {
             // 4. Verify Payment Server-Side
-            await axios.post((process.env.REACT_APP_API_URL || 'http://localhost:5000') + '/api/payment/razorpay/verify', {
+            await axios.post(`${BASE_URL}/api/payment/razorpay/verify`, {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
@@ -79,10 +81,10 @@ const CheckoutPage = () => {
               totalPrice: cart.totalPrice,
             };
 
-            const { data: placedOrder } = await axios.post((process.env.REACT_APP_API_URL || 'http://localhost:5000') + '/api/orders', orderPayload, config);
+            const { data: placedOrder } = await axios.post(`${BASE_URL}/api/orders`, orderPayload, config);
             
             // 6. Mark it as Paid
-            await axios.put(`http://localhost:5000/api/orders/${placedOrder._id}/pay`, {
+            await axios.put(`${BASE_URL}/api/orders/${placedOrder._id}/pay`, {
                id: response.razorpay_payment_id,
                status: 'COMPLETED'
             }, config);
