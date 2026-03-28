@@ -209,4 +209,6 @@ module.exports = {
   getUserProfile,
   updateUserProfile,
   getUsers,
+  toggleWishlistItem,
+  getUserWishlist,
 };
