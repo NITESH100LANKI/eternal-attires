@@ -44,9 +44,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Database Connection
-mongoose.connect(process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/eternal-attires')
-  .then(() => console.log('✅ MongoDB Connected'))
-  .catch((err) => console.error('❌ MongoDB Connection Error:', err));
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB Connected"))
+  .catch(err => console.error("MongoDB Connection Error:", err.message));
 
 // Mount Routes
 app.use('/api/products', productRoutes);
