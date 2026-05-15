@@ -1,31 +1,43 @@
 const mongoose = require('mongoose');
 
-const reviewSchema = new mongoose.Schema({
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  name: { type: String, required: true },
-  rating: { type: Number, required: true, min: 1, max: 5 },
-  comment: { type: String, required: true },
-}, { timestamps: true });
+const reviewSchema = mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    rating: { type: Number, required: true },
+    comment: { type: String, required: true },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'User',
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
 
-const productSchema = new mongoose.Schema({
+const ProductSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'User',
+  },
   name: { type: String, required: true },
   description: { type: String, required: true },
-  price: { type: Number, required: true },
-  discountPrice: { type: Number },
-  images: [
-    {
-      public_id: { type: String, required: true },
-      url: { type: String, required: true },
-    }
-  ],
+  price: { type: Number, required: true, default: 0 },
+  images: [{ type: String, required: true }],
+  brand: { type: String, required: true },
   category: { type: String, required: true },
-  brand: { type: String },
-  sizes: [{ type: String }],
   stock: { type: Number, required: true, default: 0 },
-  numOfReviews: { type: Number, default: 0 },
-  averageRating: { type: Number, default: 0 },
+  sizes: [{ type: String }],
   reviews: [reviewSchema],
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true } // Admin who added
+  averageRating: { type: Number, required: true, default: 0 },
+  numOfReviews: { type: Number, required: true, default: 0 },
 }, { timestamps: true });
 
-module.exports = mongoose.model('Product', productSchema);
+// Backward compatibility for 'image' field
+ProductSchema.virtual('image').get(function() {
+  return this.images && this.images.length > 0 ? this.images[0] : '';
+});
+
+module.exports = mongoose.model('Product', ProductSchema);

@@ -1,34 +1,52 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { FaCheckCircle } from 'react-icons/fa';
+import { CheckCircle, ShoppingBag, Package } from 'lucide-react';
 
 const OrderSuccessPage = () => {
   const { id } = useParams();
 
   return (
-    <div className="min-h-[70vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full text-center space-y-8 bg-white p-10 rounded-xl shadow-sm border border-gray-100">
-        <div className="flex justify-center">
-            <FaCheckCircle className="text-green-500 w-24 h-24" />
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
+      <div className="max-w-md w-full bg-white p-10 rounded-sm shadow-sm border border-gray-100 text-center">
+        <div className="flex justify-center mb-6">
+          <div className="bg-green-50 p-4 rounded-full">
+            <CheckCircle className="text-green-500 w-16 h-16" />
+          </div>
         </div>
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 tracking-tight">
-          Payment Successful!
+        
+        <h2 className="text-2xl font-black uppercase tracking-tighter text-gray-900 mb-2">
+          Order Placed!
         </h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
-          Your order has been placed securely. We've sent you an email with the transaction details.
+        <p className="text-gray-500 text-sm font-light mb-8">
+          Thank you for shopping with Eternal Attires. Your order has been confirmed and will be shipped shortly.
         </p>
         
-        <div className="bg-gray-50 border border-gray-200 rounded p-4 my-6 font-mono text-sm break-all text-gray-800">
-           Order ID: {id}
+        <div className="bg-gray-50 border border-gray-100 rounded-sm p-4 mb-8 text-left">
+          <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">Order ID</p>
+          <p className="font-mono text-xs text-gray-800 break-all">{id}</p>
         </div>
 
-        <div className="flex flex-col gap-3">
-            <Link to="/profile" className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 transition uppercase tracking-wide">
-               View My Orders
-            </Link>
-            <Link to="/" className="w-full flex justify-center py-3 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition uppercase tracking-wide">
-               Continue Shopping
-            </Link>
+        <div className="space-y-3">
+          <Link 
+            to="/profile" 
+            className="w-full flex items-center justify-center gap-2 py-4 px-4 bg-black text-white text-xs font-bold uppercase tracking-[0.2em] hover:bg-gray-800 transition-all shadow-lg"
+          >
+            <Package className="h-4 w-4" />
+            Track Order
+          </Link>
+          <Link 
+            to="/" 
+            className="w-full flex items-center justify-center gap-2 py-4 px-4 bg-white text-black border border-gray-200 text-xs font-bold uppercase tracking-[0.2em] hover:bg-gray-50 transition-all"
+          >
+            <ShoppingBag className="h-4 w-4" />
+            Continue Shopping
+          </Link>
+        </div>
+
+        <div className="mt-10 pt-6 border-t border-gray-100">
+          <p className="text-[10px] text-gray-400 font-medium italic">
+            A confirmation email has been sent to your registered address.
+          </p>
         </div>
       </div>
     </div>

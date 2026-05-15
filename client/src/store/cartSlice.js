@@ -1,43 +1,46 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
-  cartItems: localStorage.getItem('cartItems')
-    ? JSON.parse(localStorage.getItem('cartItems'))
-    : [],
-  shippingAddress: localStorage.getItem('shippingAddress')
-    ? JSON.parse(localStorage.getItem('shippingAddress'))
-    : {},
-  paymentMethod: 'Stripe',
-  itemsPrice: 0,
-  shippingPrice: 0,
-  taxPrice: 0,
-  totalPrice: 0,
-};
-
 const addDecimals = (num) => {
   return (Math.round(num * 100) / 100).toFixed(2);
 };
 
-const updateCart = (state) => {
-  // Calculate items price
-  const itemsPrice = state.cartItems.reduce(
-    (acc, item) => acc + item.price * item.qty,
-    0
-  );
-  state.itemsPrice = addDecimals(itemsPrice);
+const getInitialCartItems = () => {
+  const items = localStorage.getItem('cartItems');
+  return items ? JSON.parse(items) : [];
+};
 
-  // Calculate shipping price (If order is over INR 5000 then free, else INR 500)
+const calculateTotals = (cartItems) => {
+  const itemsPrice = cartItems.reduce((acc, item) => acc + item.price * item.qty, 0);
   const shippingPrice = itemsPrice > 5000 ? 0 : 50;
-  state.shippingPrice = addDecimals(shippingPrice);
-
-  // Calculate tax price (15% tax)
   const taxPrice = 0.15 * itemsPrice;
-  state.taxPrice = addDecimals(taxPrice);
-
-  // Calculate total price
   const totalPrice = itemsPrice + shippingPrice + taxPrice;
-  state.totalPrice = addDecimals(totalPrice);
+  
+  return {
+    itemsPrice: addDecimals(itemsPrice),
+    shippingPrice: addDecimals(shippingPrice),
+    taxPrice: addDecimals(taxPrice),
+    totalPrice: addDecimals(totalPrice),
+  };
+};
 
+const initialCartItems = getInitialCartItems();
+const initialTotals = calculateTotals(initialCartItems);
+
+const initialState = {
+  cartItems: initialCartItems,
+  shippingAddress: localStorage.getItem('shippingAddress')
+    ? JSON.parse(localStorage.getItem('shippingAddress'))
+    : {},
+  paymentMethod: localStorage.getItem('paymentMethod') || 'Razorpay',
+  ...initialTotals,
+};
+
+const updateCart = (state) => {
+  const totals = calculateTotals(state.cartItems);
+  state.itemsPrice = totals.itemsPrice;
+  state.shippingPrice = totals.shippingPrice;
+  state.taxPrice = totals.taxPrice;
+  state.totalPrice = totals.totalPrice;
   localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
 };
 
@@ -47,7 +50,6 @@ const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action) => {
       const item = action.payload;
-
       const existItem = state.cartItems.find((x) => x._id === item._id);
 
       if (existItem) {
